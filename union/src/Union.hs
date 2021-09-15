@@ -37,7 +37,7 @@ union (MkFA fa1States fa1Moves fa1StartState fa1FinalStates)
       nmax = Set.findMax states1
       states2 = Set.fromList (renumberStates (Set.toList fa2States) nmax)
       newstates = Set.singleton 0
-      newmoves = Set.fromList [Emove 0 (fa1StartState+1), Emove 0 (fa2StartState+nmax+1)] 
+      newmoves = Set.fromList [Emove 0 (fa1StartState+1), Emove 0 (fa2StartState+nmax+1)]
       moves1 = Set.fromList (renumberMoves (Set.toList fa1Moves) 1)
-      moves2 = Set.fromList (renumberMoves (Set.toList fa2Moves) (nmax+1)) 
+      moves2 = Set.fromList (renumberMoves (Set.toList fa2Moves) (nmax+1))
 --------------------------------------------------------------------------
