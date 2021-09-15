@@ -16,4 +16,4 @@ prop_union fa1 fa2 string
     = ((accepts (union fa1 fa2) string) == ((accepts fa1 string) || (accepts fa2 string)))
 
 main :: IO ()
-main = quickCheck $ prop_union
+main = quickCheck $ (withMaxSuccess 10000 prop_union)
