@@ -26,6 +26,9 @@ dependencies:
 - QuickCheck >= 2.14.2 && < 2.15  
 library:
   source-dirs: src
+  ghc-options:
+    - -Wall
+    - -Wmissing-local-signatures
 
 executables:
   union:
@@ -46,5 +49,7 @@ tests:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - -Wall
+    - -Wmissing-local-signatures
     dependencies:
     - union
