@@ -8,17 +8,17 @@ import Language.Mira.FA.Types
 --------------------------------------------------------------------------
 --Auxiliar Functions
 
-renumberAux :: Move Natural -> Natural -> Move Natural
-renumberAux (Move a c b) n = Move (a+n) c (b+n) 
-renumberAux (Emove a b) n = Emove (a+n) (b+n) 
+renumberAuxMoves :: Move Natural -> Natural -> Move Natural
+renumberAuxMoves (Move a c b) n = Move (a+n) c (b+n) 
+renumberAuxMoves (Emove a b) n = Emove (a+n) (b+n) 
 
-renumberSet :: [Move Natural] -> Natural -> [Move Natural] 
-renumberSet [] n = []
-renumberSet (x:xs) n = ([renumberAux x n]) ++ (renumberSet xs n) 
+renumberMoves :: [Move Natural] -> Natural -> [Move Natural] 
+renumberMoves [] n = []
+renumberMoves (x:xs) n = ([renumberAuxMoves x n]) ++ (renumberMoves xs n) 
 
-renumberFinalStates :: [Natural] -> Natural -> [Natural]
-renumberFinalStates [] n = []
-renumberFinalStates (x:xs) n = ([x + n]) ++ (renumberFinalStates xs n)
+renumberStates :: [Natural] -> Natural -> [Natural]
+renumberStates [] n = []
+renumberStates (x:xs) n = ([x+n+1]) ++ (renumberStates xs n) 
 
 --------------------------------------------------------------------------
 --Function Union
@@ -30,16 +30,14 @@ union (MkFA fa1States fa1Moves fa1StartState fa1FinalStates)
     = MkFA (Set.union (Set.union states1 states2) newstates)
            (Set.union (Set.union moves1 moves2) newmoves)
            (0)
-           (Set.union fa1FinalStates (Set.fromList (renumberFinalStates (Set.toList fa2FinalStates) n)))
+           (Set.union (Set.fromList (renumberStates (Set.toList fa1FinalStates) 0)) (Set.fromList (renumberStates (Set.toList fa2FinalStates) nmax)))
 
       where
-      n = fromIntegral (Set.size fa1States)
-      m = fromIntegral (Set.size fa2States)
-      states1 = Set.fromList [0..n]
-      states2 = Set.fromList [n+1..n+m]
-      newstates = Set.fromList [0,(n+m+1)]
-      newmoves = Set.fromList [Emove 0 1, Emove 0 (n+1)] 
-      moves1 = fa1Moves
-      moves2 = Set.fromList (renumberSet (Set.toList fa2Moves) n) 
-
+      states1 = Set.fromList (renumberStates (Set.toList fa1States) 0)
+      nmax = Set.findMax states1
+      states2 = Set.fromList (renumberStates (Set.toList fa2States) nmax)
+      newstates = Set.singleton 0
+      newmoves = Set.fromList [Emove 0 (fa1StartState+1), Emove 0 (fa2StartState+nmax+1)] 
+      moves1 = Set.fromList (renumberMoves (Set.toList fa1Moves) 1)
+      moves2 = Set.fromList (renumberMoves (Set.toList fa2Moves) (nmax+1)) 
 --------------------------------------------------------------------------
