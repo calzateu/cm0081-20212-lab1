@@ -6,7 +6,7 @@ import Language.Mira.FA.Types
 import Language.Mira.FA.Implement(accepts)
 import Numeric.Natural (Natural)
 import Test.QuickCheck
-    
+
 import Union
 
 instance Arbitrary Natural where
@@ -14,8 +14,8 @@ instance Arbitrary Natural where
       shrink = shrinkIntegral
 
 prop_union :: FA Natural -> FA Natural -> String -> Bool
-prop_union fa1 fa2 string 
-    = ((accepts (union fa1 fa2) string) == ((accepts fa1 string) || (accepts fa2 string)))
+prop_union fa1 fa2 string
+    = accepts (fa1 `union` fa2) string == (accepts fa1 string || accepts fa2 string)
 
 main :: IO ()
-main = quickCheck $ (withMaxSuccess 10000 prop_union)
+main = quickCheck $ withMaxSuccess 10000 prop_union

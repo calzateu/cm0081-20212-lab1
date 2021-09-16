@@ -14,11 +14,11 @@ renumberAuxMoves (Emove a b) n = Emove (a+n) (b+n)
 
 renumberMoves :: [Move Natural] -> Natural -> [Move Natural] 
 renumberMoves [] _ = []
-renumberMoves (x:xs) n = ([renumberAuxMoves x n]) ++ (renumberMoves xs n) 
+renumberMoves (x:xs) n = renumberAuxMoves x n : renumberMoves xs n 
 
 renumberStates :: [Natural] -> Natural -> [Natural]
 renumberStates [] _ = []
-renumberStates (x:xs) n = ([x+n+1]) ++ (renumberStates xs n) 
+renumberStates (x:xs) n = x+n+1 : renumberStates xs n 
 
 --------------------------------------------------------------------------
 --Function Union
@@ -29,7 +29,7 @@ union (MkFA fa1States fa1Moves fa1StartState fa1FinalStates)
 
     = MkFA (Set.union (Set.union states1 states2) newstates)
            (Set.union (Set.union moves1 moves2) newmoves)
-           (0)
+           0
            (Set.union (Set.fromList (renumberStates (Set.toList fa1FinalStates) 0)) (Set.fromList (renumberStates (Set.toList fa2FinalStates) nmax)))
 
       where
