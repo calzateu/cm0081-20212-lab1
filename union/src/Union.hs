@@ -1,7 +1,7 @@
 module Union (union) where
 
 import Numeric.Natural ( Natural )
-import Data.Set ( Set )                 
+import Data.Set ()                
 import qualified Data.Set as Set
 import Language.Mira.FA.Types
 
@@ -13,11 +13,11 @@ renumberAuxMoves (Move a c b) n = Move (a+n) c (b+n)
 renumberAuxMoves (Emove a b) n = Emove (a+n) (b+n) 
 
 renumberMoves :: [Move Natural] -> Natural -> [Move Natural] 
-renumberMoves [] n = []
+renumberMoves [] _ = []
 renumberMoves (x:xs) n = ([renumberAuxMoves x n]) ++ (renumberMoves xs n) 
 
 renumberStates :: [Natural] -> Natural -> [Natural]
-renumberStates [] n = []
+renumberStates [] _ = []
 renumberStates (x:xs) n = ([x+n+1]) ++ (renumberStates xs n) 
 
 --------------------------------------------------------------------------
