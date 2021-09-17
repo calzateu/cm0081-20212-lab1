@@ -5,7 +5,7 @@ Alejandro Villada Toro & Cristian Alzate Urrea
 Ubuntu 20.04
 
 ## stack version used
-stack 2.7.3
+Stack 2.7.3
 
 ## GHC version used
 GHC 8.10.7
