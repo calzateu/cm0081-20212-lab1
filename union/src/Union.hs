@@ -1,11 +1,25 @@
+-----------------------------------------------------------------------------------------------
+-- Union.hs                                                                                  --
+--                                                                                           --
+-- Implementation of the union of two finite automatas,                                      --
+-- which are defined in the article of Simon Thompson [1],                                   --
+-- and testing with QuickCheck [2]                                                           --
+--                                                                                           --
+-- [1] Simon Thompson. Regular Expressions and Automata                                      --
+-- using Haskell, 2000. https://www.cs.kent.ac.uk/people/staff/sjt/craft2e/regExp.pdf        --
+--                                                                                           --
+-- [2] Koen Claessen and John Hughes. QuickCheck: A lightweight tool for                     --
+-- random testing of Haskell Programs. ICFP '00.                                             --
+--                                                                                           --
+-- Implemented with GHC 8.10.7, Tested with QuickCheck 2.14.2 and Managed with Stack 2.7.3   --
+-----------------------------------------------------------------------------------------------
 module Union (union) where
 
 import Numeric.Natural ( Natural )
 import Data.Set ()                
 import qualified Data.Set as Set
 import Language.Mira.FA.Types
-
---------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 --Auxiliar Functions
 
 -- This receives a Move or Emove and a natural number. After, 
@@ -28,7 +42,7 @@ renumberStates :: [Natural] -> Natural -> [Natural]
 renumberStates [] _ = []
 renumberStates (x:xs) n = x+n+1 : renumberStates xs n 
 
---------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 --Function Union
 
 -- This function takes two automaton and returns the union of them.
@@ -56,4 +70,4 @@ union (MkFA fa1States fa1Moves fa1StartState fa1FinalStates)
       newmoves = Set.fromList [Emove 0 (fa1StartState+1), Emove 0 (fa2StartState+nmax+1)]
       moves1 = Set.fromList (renumberMoves (Set.toList fa1Moves) 1)
       moves2 = Set.fromList (renumberMoves (Set.toList fa2Moves) (nmax+1))
---------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
