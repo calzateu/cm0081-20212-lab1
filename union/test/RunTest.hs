@@ -18,13 +18,16 @@ instance Arbitrary Natural where
 -------------------------------------------------------------------------------------
 --Prop functions
 
--- prop_union takes two natural automaton and a string. Then, 
--- it test if the union of that automatons accepts the string
--- and at least one of the automaton accepts the same string
-prop_union :: FA Natural -> FA Natural -> String -> Bool
-prop_union fa1 fa2 string
-    = accepts (fa1 `union` fa2) string == (accepts fa1 string || accepts fa2 string)
-
+-- prop_union takes two natural automaton and a list of strings.  
+-- Then, it test if the union of that automatons accepts the head
+-- of the list and at least one of the automaton accepts the same 
+-- head. Then we make the recursive call.
+prop_union :: FA Natural -> FA Natural -> [String] -> Bool
+prop_union _ _ [] = True
+prop_union fa1 fa2 (x:xs)
+    = (accepts (fa1 `union` fa2) x == (accepts fa1 x || accepts fa2 x)) &&
+      (prop_union fa1 fa2 xs)
+      
 -- The main function run the prop_union in quickCheck with
 -- 10000 tests.
 main :: IO ()
